@@ -14,10 +14,14 @@ public class Main
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
     int input = Integer.parseInt(bufferedReader.readLine());
     generatePeople(input);
+    System.out.println(input + " people generated");
   }
 
   private static void generatePeople(int count)
   {
-    System.out.println(count + " people generated");
+    for(int i = 0; i < count; i++)
+    {
+
+    }
   }
 }
