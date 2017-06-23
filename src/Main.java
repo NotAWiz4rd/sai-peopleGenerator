@@ -3,6 +3,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,6 +20,8 @@ public class Main
 
   private static int MAX_HEIGHT = 205;
   private static int MIN_HEIGHT = 150;
+
+  private static String propertyFile = "Resources/definitions.properties";
 
   private static PrintWriter printWriter;
 
@@ -34,7 +41,7 @@ public class Main
   }
 
   private static void generatePeople(int count)
-    throws FileNotFoundException
+    throws IOException
   {
     writeToFile("people");
     writeToFile("{");
@@ -119,11 +126,20 @@ public class Main
   }
 
   private static void generateProperties()
-    throws FileNotFoundException
+    throws IOException
   {
     writeToFile("properties");
     writeToFile("{");
-    // TODO read properties-file and put them into an Array, than generate a random amount of random numbers to choose the properties
+    ArrayList<String> properties = (ArrayList<String>) readProperties();
+
+    Random random = new Random();
+    int border = random.nextInt(properties.size() + 1);
+    for(int i = 0; i < border; i++)
+    {
+      int propertyID = random.nextInt(properties.size());
+      writeToFile("'" + properties.get(propertyID) + "'");
+      properties.remove(propertyID);
+    }
     writeToFile("}");
   }
 
@@ -134,5 +150,12 @@ public class Main
     writeToFile("{");
     // TODO read stored properties and choose random ones and generate a random impact and personalLevel
     writeToFile("}");
+  }
+
+  private static List<String> readProperties()
+    throws IOException
+  {
+    Path path = Paths.get(propertyFile);
+    return Files.readAllLines(path);
   }
 }
