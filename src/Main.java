@@ -194,4 +194,9 @@ public class Main
     Path path = Paths.get(propertyFile);
     return Files.readAllLines(path);
   }
+
+  private static void generateWorkplace()
+  {
+    // TODO think about workplace generation
+  }
 }
