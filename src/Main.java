@@ -21,6 +21,8 @@ public class Main
   private static int MAX_HEIGHT = 205;
   private static int MIN_HEIGHT = 150;
 
+  private static int MAX_PROPERTIES = 10;
+
   private static String propertyFile = "Resources/definitions.properties";
 
   private static PrintWriter printWriter;
@@ -55,7 +57,6 @@ public class Main
       System.out.println("Height: " + generateHeight());
       generateAttributes();
       generateProperties();
-      generateOpinions();
       System.out.println("--------------------");
       writeToFile("}");
       writeToFile("");
@@ -133,7 +134,17 @@ public class Main
     ArrayList<String> properties = (ArrayList<String>) readProperties();
 
     Random random = new Random();
-    int border = random.nextInt(properties.size() + 1);
+    int border;
+
+    if(MAX_PROPERTIES < properties.size())
+    {
+      border = random.nextInt(MAX_PROPERTIES) + 1;
+    }
+    else
+    {
+      border = random.nextInt(properties.size()) + 1;
+    }
+
     for(int i = 0; i < border; i++)
     {
       int propertyID = random.nextInt(properties.size());
@@ -141,14 +152,39 @@ public class Main
       properties.remove(propertyID);
     }
     writeToFile("}");
+
+    generateOpinions(properties);  // generate only opinions for properties the person doesn't have
   }
 
-  private static void generateOpinions()
+  private static void generateOpinions(ArrayList<String> properties)
     throws FileNotFoundException
   {
     writeToFile("opinions");
     writeToFile("{");
-    // TODO read stored properties and choose random ones and generate a random impact and personalLevel
+
+    Random random = new Random();
+    int amount = random.nextInt(properties.size());
+
+    for(int i = 0; i < amount; i++)
+    {
+      writeToFile("{");
+      int propertyID = random.nextInt(properties.size());
+      writeToFile("property: '" + properties.get(propertyID) + "'");
+
+      if(random.nextBoolean())  // generate impact of a maximum 99 with maybe a - in front
+      {
+        writeToFile("impact: '" + random.nextInt(100) + "'");
+      }
+      else
+      {
+        writeToFile("impact: '-" + random.nextInt(100) + "'");
+      }
+
+      writeToFile("personalLevel: '" + random.nextInt(101) + "'"); // generate personalLevel with Max of 100
+
+      writeToFile("}");
+      properties.remove(propertyID);
+    }
     writeToFile("}");
   }
 
