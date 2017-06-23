@@ -8,6 +8,12 @@ import java.util.Random;
  */
 public class Main
 {
+  private static int MAX_AGE = 50;
+  private static int MIN_AGE = 10;
+
+  private static int MAX_HEIGHT = 205;
+  private static int MIN_HEIGHT = 150;
+
   public static void main(String[] args)
     throws IOException
   {
@@ -26,6 +32,7 @@ public class Main
       System.out.println("Name: " + generateName());
       System.out.println("Age: " + generateAge());
       System.out.println("Height: " + generateHeight());
+      System.out.println("Sex: " + generateSex());
       System.out.println("--------------------");
     }
 
@@ -47,12 +54,25 @@ public class Main
   private static int generateAge()
   {
     Random random = new Random();
-    return 70 - random.nextInt(60);
+    return MAX_AGE - random.nextInt(MAX_AGE - MIN_AGE);
   }
 
   private static int generateHeight()
   {
     Random random = new Random();
-    return 205 - random.nextInt(55);
+    return MAX_HEIGHT - random.nextInt(MAX_HEIGHT - MIN_HEIGHT);
+  }
+
+  private static String generateSex()
+  {
+    Random random = new Random();
+    if(random.nextBoolean())
+    {
+      return "male";
+    }
+    else
+    {
+      return "female";
+    }
   }
 }
