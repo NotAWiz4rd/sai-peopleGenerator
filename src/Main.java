@@ -46,8 +46,12 @@ public class Main
       System.out.println("Sex: " + generateSex());
       System.out.println("Age: " + generateAge());
       System.out.println("Height: " + generateHeight());
+      generateAttributes();
+      generateProperties();
+      generateOpinions();
       System.out.println("--------------------");
       writeToFile("}");
+      writeToFile("");
     }
     writeToFile("}");
   }
@@ -124,7 +128,11 @@ public class Main
   }
 
   private static void generateOpinions()
+    throws FileNotFoundException
   {
+    writeToFile("opinions");
+    writeToFile("{");
     // TODO read stored properties and choose random ones and generate a random impact and personalLevel
+    writeToFile("}");
   }
 }
