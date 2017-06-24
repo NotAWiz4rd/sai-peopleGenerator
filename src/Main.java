@@ -127,7 +127,6 @@ public class Main
     throws FileNotFoundException
   {
     // strength, charisma, intelligence, dexterity, constitution
-    // TODO think about max and min amounts of attribute points to be spend here randomly
     writeToFile("attributes");
     writeToFile("{");
     Random random = new Random();
@@ -185,11 +184,11 @@ public class Main
     writeToFile("{");
 
     Random random = new Random();
-    int amount = random.nextInt(properties.size());
+    int amount = random.nextInt(MAX_OPINIONS);
 
-    if(amount > MAX_OPINIONS) // have a max of opinions
+    if(amount > properties.size())
     {
-      amount = MAX_OPINIONS;
+      amount = properties.size();
     }
 
     for(int i = 0; i < amount; i++)
