@@ -121,9 +121,28 @@ public class Main
   }
 
   private static void generateAttributes()
+    throws FileNotFoundException
   {
     // strength, charisma, intelligence, dexterity, constitution
     // TODO think about max and min amounts of attribute points to be spend here randomly
+    writeToFile("attributes");
+    writeToFile("{");
+    Random random = new Random();
+
+    for(int i = 0; i < 5; i++) // generate 5 numbers with max 20 and min 1, expected value 11
+    {
+      int x = (int) (random.nextGaussian() * 5) + 11;
+      if(x > 20)
+      {
+        x = 20;
+      }
+      else if(x < 1)
+      {
+        x = 1;
+      }
+      writeToFile("'" + x + "'");
+    }
+    writeToFile("}");
   }
 
   private static void generateProperties()
