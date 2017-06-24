@@ -23,6 +23,8 @@ public class Main
 
   private static int MAX_PROPERTIES = 10;
 
+  private static int MAX_OPINIONS = 20;
+
   private static String propertyFile = "Resources/definitions.properties";
 
   private static PrintWriter printWriter;
@@ -50,7 +52,8 @@ public class Main
     for(int i = 1; i < count + 1; i++) // starts counting at 1
     {
       writeToFile("{");
-      System.out.println("Persona " + i);
+      System.out.println("Persona #" + i);
+      writeToFile("id: '" + i + "'");
       System.out.println("Name: " + generateName());
       System.out.println("Sex: " + generateSex());
       System.out.println("Age: " + generateAge());
@@ -183,6 +186,11 @@ public class Main
 
     Random random = new Random();
     int amount = random.nextInt(properties.size());
+
+    if(amount > MAX_OPINIONS) // have a max of opinions
+    {
+      amount = MAX_OPINIONS;
+    }
 
     for(int i = 0; i < amount; i++)
     {
