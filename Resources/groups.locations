@@ -1,0 +1,6 @@
+school;MAXAGE-20
+shop;MINAGE-18
+government;MINAGE-35
+secretGovernmentAgency;MINAGE-29
+olympicTeam;MINHEIGHT-170,MINAGE-17,MAXAGE-30
+rollercoasterRepairTeam;MAXHEIGHT-190,MINAGE-19

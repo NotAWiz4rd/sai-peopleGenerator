@@ -15,19 +15,23 @@ import java.util.Random;
  */
 public class Main
 {
-  private static int MAX_AGE = 50;
-  private static int MIN_AGE = 10;
+  private static final int MAX_AGE = 50;
+  private static final int MIN_AGE = 10;
 
-  private static int MAX_HEIGHT = 205;
-  private static int MIN_HEIGHT = 150;
+  private static final int MAX_HEIGHT = 205;
+  private static final int MIN_HEIGHT = 150;
 
-  private static int MAX_PROPERTIES = 10;
+  private static final int MAX_PROPERTIES = 10;
 
-  private static int MAX_OPINIONS = 20;
+  private static final int MAX_OPINIONS = 20;
 
-  private static String propertyFile = "Resources/definitions.properties";
+  private static final String PROPERTYFILE = "Resources/definitions.properties";
+  private static final String LOCATIONFILE = "Resources/groups.locations";
 
   private static PrintWriter printWriter;
+
+  private static int age;
+  private static int height;
 
   public static void main(String[] args)
     throws IOException
@@ -56,8 +60,9 @@ public class Main
       writeToFile("id: '" + i + "'");
       System.out.println("Name: " + generateName());
       System.out.println("Sex: " + generateSex());
-      System.out.println("Age: " + generateAge());
-      System.out.println("Height: " + generateHeight());
+      age = generateAge();
+      height = generateHeight();
+      generateWorkplace();
       generateAttributes();
       generateProperties();
       System.out.println("--------------------");
@@ -152,7 +157,7 @@ public class Main
   {
     writeToFile("properties");
     writeToFile("{");
-    ArrayList<String> properties = (ArrayList<String>) readProperties();
+    ArrayList<String> properties = (ArrayList<String>) readFile(PROPERTYFILE);
 
     Random random = new Random();
     int border;
@@ -214,15 +219,68 @@ public class Main
     writeToFile("}");
   }
 
-  private static List<String> readProperties()
+  private static List<String> readFile(String filename)
     throws IOException
   {
-    Path path = Paths.get(propertyFile);
+    Path path = Paths.get(filename);
     return Files.readAllLines(path);
   }
 
   private static void generateWorkplace()
+    throws IOException
   {
-    // TODO think about workplace generation
+    String workplaceGroupID = "";
+    ArrayList<String> locationGroups = (ArrayList<String>) readFile(LOCATIONFILE);
+    ArrayList<String> possibleWorkplaces = new ArrayList<>();
+
+    for(String locationGroup : locationGroups)
+    {
+      String[] splitGroup = locationGroup.split(";");
+
+      if(splitGroup[1].contains(",")) // check for multiple conditions
+      {
+        String[] splitConditions = splitGroup[1].split(",");
+        int checkCounter = 0;
+        for(String splitCondition : splitConditions)
+        {
+          if(decryptWorkplaceCondition(splitCondition))
+          {
+            checkCounter++;
+          }
+        }
+        if(checkCounter == splitConditions.length){
+          possibleWorkplaces.add(splitGroup[0]);
+        }
+      }
+      else if(decryptWorkplaceCondition(splitGroup[1]))
+      {
+        possibleWorkplaces.add(splitGroup[0]);
+      }
+    }
+
+    if(possibleWorkplaces.size() > 0) // if there are possible Workplaces choose one at random
+    {
+      Random random = new Random();
+      workplaceGroupID = possibleWorkplaces.get(random.nextInt(possibleWorkplaces.size()));
+    }
+    writeToFile("workplace: '#" + workplaceGroupID + "'");
+  }
+
+  private static boolean decryptWorkplaceCondition(String condition)
+  {
+    String[] conditionPoints = condition.split("-");
+
+    switch(conditionPoints[0]) // add conditions here and check against already generated stuff
+    {
+      case "MAXAGE":
+        return age <= Integer.parseInt(conditionPoints[1]);
+      case "MINAGE":
+        return age >= Integer.parseInt(conditionPoints[1]);
+      case "MINHEIGHT":
+        return height >= Integer.parseInt(conditionPoints[1]);
+      case "MAXHEIGHT":
+        return height <= Integer.parseInt(conditionPoints[1]);
+    }
+    return false;
   }
 }
