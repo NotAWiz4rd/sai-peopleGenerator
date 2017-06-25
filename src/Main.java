@@ -51,8 +51,6 @@ public class Main
   private static void generatePeople(int count)
     throws IOException
   {
-    writeToFile("people");
-    writeToFile("{");
     for(int i = 1; i < count + 1; i++) // starts counting at 1
     {
       writeToFile("{");
@@ -67,9 +65,8 @@ public class Main
       generateProperties();
       System.out.println("--------------------");
       writeToFile("}");
-      writeToFile("");
+      writeToFile("&"); // marks end of person for main program
     }
-    writeToFile("}");
   }
 
   private static void writeToFile(String writable) // writes generated String into a file which is readable by the main application
@@ -195,6 +192,10 @@ public class Main
     {
       amount = properties.size();
     }
+    else if(amount < 1)
+    {
+      amount = 1;
+    }
 
     for(int i = 0; i < amount; i++)
     {
@@ -248,7 +249,8 @@ public class Main
             checkCounter++;
           }
         }
-        if(checkCounter == splitConditions.length){
+        if(checkCounter == splitConditions.length) // only add if all conditions are met
+        {
           possibleWorkplaces.add(splitGroup[0]);
         }
       }
